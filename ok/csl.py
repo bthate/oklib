@@ -78,15 +78,15 @@ def execute(main):
 def get_completer():
     return readline.get_completer()
 
-def parse_cli():
+def parse_cli(name="ok"):
     cfg = Cfg()
     parse(cfg, " ".join(sys.argv[1:]))
     if cfg.wd:
         p = cfg.wd
     if root():
-        p = "/var/lib/olib/"
+        p = "/var/lib/%s/" % name
     else:
-        p = "data"
+        p = os.path.expanduser("~/.%s" % name)
     olib.workdir = p
     if len(sys.argv) <= 1:
         c = Cfg()

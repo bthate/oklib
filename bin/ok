@@ -12,7 +12,7 @@ from ok.csl import Console, parse_cli, execute
 
 def main():
     k = Kernel()
-    cfg = parse_cli()
+    cfg = parse_cli("ok")
     k.walk("mods")
     if cfg.txt:
         return k.cmd(cfg.origtxt)
