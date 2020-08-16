@@ -5,8 +5,8 @@
 import ob, os, queue, socket, textwrap, time, threading, _thread
 
 from olib import Cfg, last
-from .hdl import Event, Handler, get_kernel
-from .prs import parse
+from ok.hdl import Event, Handler, get_kernel
+from ok.prs import parse
 
 def __dir__():
     return ("Cfg", "DCC", "Event", "IRC")

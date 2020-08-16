@@ -1,0 +1,26 @@
+#!/usr/bin/python3 -u
+# OK - the ok library !
+#
+# shell
+
+__version__ = 1
+
+import os, sys ; sys.path.insert(0, os.getcwd())
+
+from ok.hdl import Kernel
+from ok.csl import Console, parse_cli, execute
+
+def main():
+    k = Kernel()
+    cfg = parse_cli()
+    k.walk("mods")
+    if cfg.txt:
+        return k.cmd(cfg.origtxt)
+    if "s" in cfg.opts:
+        c = Console()
+        c.start()
+        k.start()
+        k.init(cfg.mods)
+        k.wait()
+
+execute(main)

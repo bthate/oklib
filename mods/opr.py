@@ -1,12 +1,11 @@
-#!/usr/bin/python3 -u
 # OLIB - the object library !
 #
 # oper
 
-import inspect, os
+import inspect, olib, os
 
-from olib import Object, get, save
-from .hdl import get_kernel
+from olib import Object, cdir, get, save
+from ok.hdl import get_kernel
 
 class Log(Object):
 

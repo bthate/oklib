@@ -5,7 +5,7 @@
 import mailbox, os, time
 
 from olib import Db, Object, fntime, format, keys, save, update
-from .prs import parse, elapsed
+from ok.prs import parse, elapsed
 
 bdmonths = ['Bo', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
             'Sep', 'Oct', 'Nov', 'Dec']
