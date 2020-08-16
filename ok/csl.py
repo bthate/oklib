@@ -3,7 +3,7 @@
 #
 # console
 
-import atexit, olib, os, readline, sys, termios, time, threading
+import atexit, olib, os, readline, sys, termios, time, threading, _thread
 
 from olib import Cfg, Object, update
 from .hdl import Event, get_kernel
@@ -28,7 +28,11 @@ class Console(Object):
     def input(self):
         k = get_kernel()
         while 1:
-            event = self.poll()
+            try:
+                event = self.poll()
+            except EOFError:
+                print("")
+                continue
             event.orig = repr(self)
             k.queue.put(event)
             event.wait()

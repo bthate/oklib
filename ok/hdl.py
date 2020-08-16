@@ -3,9 +3,10 @@
 #
 # handler
 
-import importlib, importlib.util, inspect, os, queue, sys, threading, time, traceback
+import importlib, importlib.util, inspect, os, queue, sys, threading
+import time, traceback, types, _thread
 
-from olib import Default, Object, update
+from olib import Default, Object, get_name, update
 
 class Bus(Object):
 
@@ -181,7 +182,12 @@ class Task(threading.Thread):
     def run(self):
         func, args = self._queue.get()
         self.setName(self._name)
-        self._result = func(*args)
+        try:
+            self._result = func(*args)
+        except EOFError:
+            _thread.interrupt_main()
+        except Exception as ex:
+            print(get_exception())
 
     def join(self, timeout=None):
         super().join(timeout)
@@ -202,7 +208,7 @@ class Kernel(Handler):
         pass
 
     def launch(self, func, *args, **kwargs):
-        name = kwargs.get("name", func.__name__)
+        name = kwargs.get("name", get_name(func))
         t = Task(func, *args, name=name, daemon=True)
         t.start()
         return t
