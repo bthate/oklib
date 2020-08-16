@@ -48,7 +48,7 @@ class Event(Event):
 
     def show(self):
         for txt in self.result:
-            k.fleet.say(self.orig, self.channel, txt)
+            k.bus.say(self.orig, self.channel, txt)
 
 class TextWrap(textwrap.TextWrapper):
 
@@ -90,7 +90,7 @@ class IRC(Handler):
         self.register("NOTICE", self.NOTICE)
         self.register("PRIVMSG", self.PRIVMSG)
         self.register("QUIT", self.QUIT)
-        k.fleet.add(self)
+        k.bus.add(self)
 
     def _connect(self, server):
         oldsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -382,7 +382,7 @@ class DCC(Handler):
         self._fsock = None
         self.encoding = "utf-8"
         self.origin = ""
-        k.fleet.add(self)
+        k.bus.add(self)
 
     def raw(self, txt):
         self._fsock.write(str(txt).rstrip())

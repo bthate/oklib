@@ -3,13 +3,14 @@
 #
 # console
 
-import atexit, olib, os, readline, sys, termios
+import atexit, olib, os, readline, sys, termios, time, threading
 
 from olib import Cfg, Object, update
-from .hdl import get_kernel
+from .hdl import Event, get_kernel
 from .prs import parse
 
 resume = {}
+starttime = time.time()
 
 class Cfg(Cfg):
 

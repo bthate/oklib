@@ -4,7 +4,7 @@
 
 import time
 
-from olib import Default, Object
+from olib import Default, Object, update
 
 year_formats = [
     "%b %H:%M",

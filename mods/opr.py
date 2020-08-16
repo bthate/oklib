@@ -2,10 +2,12 @@
 #
 # oper
 
-import inspect, olib, os
+import inspect, olib, os, time, threading
 
-from olib import Object, cdir, get, save
+from olib import Object, cdir, get, save, update
+from ok.csl import starttime
 from ok.hdl import get_kernel
+from ok.prs import elapsed
 
 class Log(Object):
 
@@ -154,7 +156,7 @@ def tsk(event):
         if str(thr).startswith("<_"):
             continue
         d = vars(thr)
-        o = o.Object()
+        o = Object()
         update(o, d)
         if get(o, "sleep", None):
             up = o.sleep - int(time.time() - o.state.latest)
