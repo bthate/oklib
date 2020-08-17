@@ -1,4 +1,3 @@
-#!/usr/bin/python3 -u
 # OLIB - the object lirbrary !
 #
 # console
