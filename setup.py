@@ -14,6 +14,7 @@ setup(
     long_description="OKLIB has all you need to write a standard application.",
     license='Public Domain',
     install_requires=["olib>=2"],
+    zip_safe=False,
     packages=["ok"],
     namespace_packages=["ok"],
     classifiers=['Development Status :: 3 - Alpha',
