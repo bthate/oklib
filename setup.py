@@ -13,7 +13,7 @@ setup(
     description="OKLIB is a library with basic console/clock/parse/handle functionality. no copyright or LICENSE. placed in the Public Domain.",
     long_description="OKLIB has all you need to write a standard application.",
     license='Public Domain',
-    install_requires=["olib"],
+    install_requires=["olib>=2"],
     packages=["ok"],
     namespace_packages=["ok"],
     classifiers=['Development Status :: 3 - Alpha',
