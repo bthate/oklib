@@ -1,1 +1,1 @@
-rm -fR dist *~ bin/*~ ok/*~ ok/__pycache__ oklib.egg-info mods/*~ mods/__pycache__
+rm -fR build dist *~ bin/*~ ok/*~ ok/__pycache__ oklib.egg-info mods/*~ mods/__pycache__
