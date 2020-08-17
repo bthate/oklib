@@ -11,7 +11,7 @@ import inspect, olib, os, time, threading
 
 from olib import Object, cdir, get, save, update
 from ok.hdl import Kernel, get_kernel
-from ok.csl import execute, parse_cli, starttime
+from ok.csl import Console, execute, parse_cli, starttime
 from ok.prs import elapsed
 
 class Log(Object):
