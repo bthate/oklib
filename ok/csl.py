@@ -113,7 +113,7 @@ def setcompleter(commands):
     readline.parse_and_bind("tab: complete")
     atexit.register(lambda: readline.set_completer(None))
 
-def setup(fd):
+def termsetup(fd):
     return termios.tcgetattr(fd)
 
 def termreset():
@@ -123,7 +123,7 @@ def termreset():
 def termsave():
     try:
         resume["fd"] = sys.stdin.fileno()
-        resume["old"] = setup(sys.stdin.fileno())
+        resume["old"] = termsetup(sys.stdin.fileno())
         atexit.register(termreset)
     except termios.error:
         pass
