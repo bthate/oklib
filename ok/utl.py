@@ -100,7 +100,7 @@ def get_exception(txt="", sep=" "):
         mod = []
         for element in plugfile[::-1]:
             mod.append(element)
-            if "okbot" in element:
+            if "okbot" in element or "ok" in element or "olib" in element:
                 break
         ownname = ".".join(mod[::-1])
         if "o" not in ownname:

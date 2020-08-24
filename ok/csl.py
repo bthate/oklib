@@ -4,7 +4,7 @@
 
 import atexit, olib, os, readline, sys, termios, time, threading, _thread
 
-from olib import Object, update
+from olib import Object, cdir, update
 from .hdl import Event
 from .krn import get_kernel
 from .prs import parse
@@ -91,10 +91,9 @@ def parse_cli(name="ok"):
         p = cfg.wd
     if root():
         p = "/var/lib/%s/" % name
-        cfg.root = True
     else:
         p = os.path.expanduser("~/.%s" % name)
-        cfg.root = False
+    cdir(p)
     olib.workdir = p
     if len(sys.argv) <= 1:
         c = Cfg()
