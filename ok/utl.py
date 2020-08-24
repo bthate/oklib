@@ -4,7 +4,6 @@
 
 import importlib, inspect, os, sys, traceback
 
-
 def cdir(path):
     if os.path.exists(path):
         return
@@ -46,6 +45,35 @@ def find_cmds(mod):
                 cmds[key] = o
     return cmds
 
+def find_modules(pkgs, skip=None):
+    modules = []
+    for pkg in pkgs.split(","):
+        if skip is not None and skip not in pkg:
+            continue
+        try:
+            p = direct(pkg)
+        except ModuleNotFoundError:
+            continue
+        for key, m in inspect.getmembers(p, inspect.ismodule):
+            if m not in modules:
+                modules.append(m)
+    return modules
+
+def find_shorts(mn):
+    shorts = Ol()
+    for mod in find_modules(mn):
+        for key, o in inspect.getmembers(mod, inspect.isclass):
+            if issubclass(o, Object):
+                t = "%s.%s" % (o.__module__, o.__name__)
+                shorts.append(o.__name__.lower(), t)
+    return shorts
+
+def list_files(wd):
+    path = os.path.join(wd, "store")
+    if not os.path.exists(path):
+        return ""
+    return "|".join(os.listdir(path))
+
 def get_cls(name):
     try:
         modname, clsname = name.rsplit(".", 1)
@@ -72,7 +100,7 @@ def get_exception(txt="", sep=" "):
         mod = []
         for element in plugfile[::-1]:
             mod.append(element)
-            if "o" in element:
+            if "okbot" in element:
                 break
         ownname = ".".join(mod[::-1])
         if "o" not in ownname:

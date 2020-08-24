@@ -4,7 +4,7 @@
 
 import threading, time
 
-from olib import Object
+from olib import Object, get_name
 from .utl import launch
 
 def __dir__():
@@ -28,7 +28,7 @@ class Timer(Object):
 
     def start(self):
         if not self.name:
-            self.name = self.func.__name__
+            self.name = get_name(self.func)
         timer = threading.Timer(self.sleep, self.run, self.args, self.kwargs)
         timer.setName(self.name)
         timer.setDaemon(True)
@@ -48,6 +48,6 @@ class Timer(Object):
 class Repeater(Timer):
 
     def run(self, *args, **kwargs):
-        thr = launch(self.start)
+        thr = launch(self.start, **kwargs)
         super().run(*args, **kwargs)
         return thr

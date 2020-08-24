@@ -7,7 +7,7 @@ import time, traceback, types, _thread
 
 from olib import Default, Object, get_name, update
 from ok.hdl import Handler
-from ok.utl import launch, spl
+from ok.utl import get_exception, launch, spl
 
 def __dir__():
     return ("Cfg", "Kernel", "bus", "get_kernel", "kernels")
@@ -51,7 +51,7 @@ class Kernel(Handler):
             mods.append(mod)
             func = getattr(mod, "init", None)
             if func:
-                thrs.append(launch(func, self))
+                thrs.append(launch(func, self, name=get_name(func)))
         for thr in thrs:
             thr.join()
         return mods
@@ -68,11 +68,11 @@ class Kernel(Handler):
         assert olib.workdir
         sys.path.insert(0, olib.workdir)
         cdir(olib.workdir)
-        cdir(os.path.join(olib.workdir, "mods", ""))
-        for fn in os.listdir(os.path.join(olib.workdir, "mods")):
+        cdir(os.path.join(olib.workdir, "okmods", ""))
+        for fn in os.listdir(os.path.join(olib.workdir, "okmods")):
             if fn.startswith("_") or not fn.endswith(".py"):
                 continue
-            mn = "mods.%s" % fn[:-3]
+            mn = "okmods.%s" % fn[:-3]
             module = self.load_mod(mn)
             mods.append(module)
         return mods
