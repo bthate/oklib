@@ -2,7 +2,7 @@
 #
 # utilities
 
-import importlib, inspect, os, sys, traceback
+import importlib, inspect, os, sys, time, traceback
 
 def cdir(path):
     if os.path.exists(path):
@@ -60,6 +60,7 @@ def find_modules(pkgs, skip=None):
     return modules
 
 def find_shorts(mn):
+    from olib import Object, Ol
     shorts = Ol()
     for mod in find_modules(mn):
         for key, o in inspect.getmembers(mod, inspect.isclass):
@@ -75,6 +76,7 @@ def list_files(wd):
     return "|".join(os.listdir(path))
 
 def get_cls(name):
+    from olib import ENOCLASS
     try:
         modname, clsname = name.rsplit(".", 1)
     except:
@@ -103,8 +105,6 @@ def get_exception(txt="", sep=" "):
             if "okbot" in element or "ok" in element or "olib" in element:
                 break
         ownname = ".".join(mod[::-1])
-        if "o" not in ownname:
-            continue
         result.append("%s:%s" % (ownname, linenr))
     res = "%s %s: %s %s" % (sep.join(result), exctype, excvalue, str(txt))
     del trace
@@ -112,7 +112,7 @@ def get_exception(txt="", sep=" "):
 
 def launch(func, *args, **kwargs):
     from olib import get_name
-    from .tsk import Task
+    from ok.tsk import Task
     name = kwargs.get("name", get_name(func))
     t = Task(func, *args, name=name, daemon=True)
     t.start()

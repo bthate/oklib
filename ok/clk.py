@@ -5,7 +5,7 @@
 import threading, time
 
 from olib import Object, get_name
-from .utl import launch
+from ok.utl import launch
 
 def __dir__():
     return ("Repeater", "Timer")

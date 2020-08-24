@@ -2,17 +2,18 @@
 #
 # console
 
-import atexit, olib, os, readline, sys, termios, time, threading, _thread
+import atexit, olib, os, readline, sys, termios, time, threading
 
-from olib import Object, cdir, update
-from .hdl import Event
-from .krn import get_kernel
-from .prs import parse
-from .utl import launch
+from olib import Object, update
+from ok.hdl import Event
+from ok.krn import get_kernel
+from ok.prs import parse
+from ok.utl import launch
 
 def __dir__():
     return ("Console", "execute", "parse_cli", "starttime")
 
+cmds = []
 resume = {}
 starttime = time.time()
 
@@ -84,16 +85,17 @@ def get_completer():
     return readline.get_completer()
 
 def parse_cli(name="ok"):
-    from .krn import Cfg
+    from ok.krn import Cfg
     cfg = Cfg()
     parse(cfg, " ".join(sys.argv[1:]))
     if cfg.wd:
         p = cfg.wd
     if root():
         p = "/var/lib/%s/" % name
+        cfg.root = True
     else:
         p = os.path.expanduser("~/.%s" % name)
-    cdir(p)
+        cfg.root = False
     olib.workdir = p
     if len(sys.argv) <= 1:
         c = Cfg()
@@ -109,7 +111,7 @@ def root():
     return True
 
 def setcompleter(commands):
-    cmds = commands
+    cmds.extend(commands)
     readline.set_completer(complete)
     readline.parse_and_bind("tab: complete")
     atexit.register(lambda: readline.set_completer(None))

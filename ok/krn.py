@@ -2,10 +2,9 @@
 #
 # handler
 
-import importlib, importlib.util, inspect, os, queue, sys, threading
-import time, traceback, types, _thread
+import olib, os, sys, threading, time
 
-from olib import Default, Object, get_name, update
+from olib import Default, Object, cdir, get_name
 from ok.hdl import Handler
 from ok.utl import get_exception, launch, spl
 

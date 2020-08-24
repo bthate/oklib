@@ -2,12 +2,12 @@
 #
 # parse
 
-import time
+import datetime, time
 
-from olib import Default, Object, update
+from olib import Default, Object, fntime, update
 
 def __dir__():
-    return ("elapsed", "parse") 
+    return ("elapsed", "parse")
 
 year_formats = [
     "%b %H:%M",

@@ -2,11 +2,10 @@
 #
 # handler
 
-import importlib, importlib.util, inspect, os, queue, sys, threading
-import time, traceback, types, _thread
+import importlib, importlib.util, os, queue, threading, _thread
 
-from olib import Default, Object, get_name, locked, update
-from .utl import direct, find_cmds, launch, get_exception
+from olib import Default, Object, locked, update
+from ok.utl import direct, find_cmds, launch, get_exception
 
 def __dir__():
     return ("Event", "Handler")
@@ -112,4 +111,3 @@ class Handler(Object):
             module = self.load_mod(mn)
             mods.append(module)
         return mods
-

@@ -38,4 +38,3 @@ class Task(threading.Thread):
     def join(self, timeout=None):
         super().join(timeout)
         return self._result
-
