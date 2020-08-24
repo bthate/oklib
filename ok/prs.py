@@ -1,10 +1,13 @@
-# OLIB - the object library !
+# OKLIB - the ok library !
 #
 # parse
 
 import time
 
 from olib import Default, Object, update
+
+def __dir__():
+    return ("elapsed", "parse") 
 
 year_formats = [
     "%b %H:%M",

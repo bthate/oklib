@@ -1,16 +1,14 @@
-# BOTLIB - the bot library !
+# OKLIB - the ok library !
 #
 #
 
 import threading, time
 
 from olib import Object
-from .hdl import get_kernel
+from .utl import launch
 
 def __dir__():
     return ("Repeater", "Timer")
-
-k = get_kernel()
 
 class Timer(Object):
 
@@ -26,7 +24,7 @@ class Timer(Object):
 
     def run(self, *args, **kwargs):
         self.state.latest = time.time()
-        k.launch(self.func, *self.args, **self.kwargs)
+        launch(self.func, *self.args, **self.kwargs)
 
     def start(self):
         if not self.name:

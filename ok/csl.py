@@ -1,19 +1,20 @@
-# OLIB - the object lirbrary !
+# OKLIB - the ok library !
 #
 # console
 
 import atexit, olib, os, readline, sys, termios, time, threading, _thread
 
-from olib import Cfg, Object, update
-from .hdl import Event, get_kernel
+from olib import Object, update
+from .hdl import Event
+from .krn import get_kernel
 from .prs import parse
+from .utl import launch
+
+def __dir__():
+    return ("Console", "execute", "parse_cli", "starttime")
 
 resume = {}
 starttime = time.time()
-
-class Cfg(Cfg):
-
-    pass
 
 class Console(Object):
 
@@ -52,7 +53,7 @@ class Console(Object):
     def start(self):
         k = get_kernel()
         setcompleter(k.cmds)
-        k.launch(self.input)
+        launch(self.input)
 
     def wait(self):
         self.ready.wait()
@@ -83,6 +84,7 @@ def get_completer():
     return readline.get_completer()
 
 def parse_cli(name="ok"):
+    from .krn import Cfg
     cfg = Cfg()
     parse(cfg, " ".join(sys.argv[1:]))
     if cfg.wd:

@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name='oklib',
-    version='3',
+    version='4',
     url='https://github.com/bthate/oklib',
     author='Bart Thate',
     author_email='bthate@dds.nl',
