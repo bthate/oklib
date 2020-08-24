@@ -91,8 +91,10 @@ def parse_cli(name="ok"):
         p = cfg.wd
     if root():
         p = "/var/lib/%s/" % name
+        cfg.root = True
     else:
         p = os.path.expanduser("~/.%s" % name)
+        cfg.root = False
     olib.workdir = p
     if len(sys.argv) <= 1:
         c = Cfg()
