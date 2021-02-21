@@ -1,14 +1,9 @@
-# OKLIB - the ok library !
-#
-#
+import threading
+import time
 
-import threading, time
-
-from olib import Object, get_name
-from ok.utl import launch
-
-def __dir__():
-    return ("Repeater", "Timer")
+from .obj import Object
+from .thr import launch
+from .utl import get_name
 
 class Timer(Object):
 

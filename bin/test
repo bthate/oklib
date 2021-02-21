@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+
+import os, sysconfig, threading, time, unittest, _thread
+
+from ok.obj import cfg
+from ok.shl import parse
+from ok.utl import exec
+
+wd = os.path.expanduser("~/.test")
+path = os.path.join(os.getcwd(), "test")
+
+def main():
+    parse()
+    if cfg.op("v"):
+        cfg.verbose = True
+    cfg.wd = wd
+    suite = unittest.loader.TestLoader().discover(path, pattern="test*")
+    unittest.TextTestRunner(verbosity=3).run(suite)
+
+exec(main)
+os._exit(0)

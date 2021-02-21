@@ -1,1 +1,1 @@
-rm -fR build dist *~ bin/*~ ok/*~ ok/__pycache__ oklib.egg-info mods/*~ mods/__pycache__
+rm -fR mod/__pycache__ mod/*~ .lintrc env env.tar.gz test/*~ test/__pycache__ ok/*~ ok/__pycache__ dist build *~ __pycache__ bin/*~ oklib.egg-info

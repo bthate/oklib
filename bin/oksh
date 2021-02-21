@@ -3,17 +3,19 @@
 from ok.obj import cfg
 from ok.shl import Shell
 from ok.trm import wrap
-from ok.utl import e, j, os, sys
+from ok.utl import e, j, os
 
 wd = e("~/.ok")
 md = j(os.getcwd(), "mod")
 
 def main():
     cfg.wd = wd
-    h = Shell()
-    h.scandir(md)
-    h.load_mod("cli,cmd,fnd,irc,rss")
-    h.load_mod(cfg.mods)
-    return h.cmd(" ".join(sys.argv[1:]))
+    s = Shell()
+    s.scandir(md)
+    s.load_mod("cmd,fnd,irc,rss")
+    s.load_mod(cfg.mods)
+    s.start()
+    s.init(cfg.mods)
+    s.wait()
 
 wrap(main)

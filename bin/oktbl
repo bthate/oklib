@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+from ok.obj import tojson
+from ok.itr import walk
+from ok.utl import direct, spl
+
+tbl = walk("ok")
+print("tbl = %s" % tojson(tbl))

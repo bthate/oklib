@@ -1,13 +1,5 @@
-# OKLIB - the ok library !
-#
-# parse
-
-import datetime, time
-
-from olib import Default, Object, fntime, update
-
-def __dir__():
-    return ("elapsed", "parse")
+from .obj import Default, Object, update
+from .utl import day, time
 
 year_formats = [
     "%b %H:%M",
@@ -68,18 +60,17 @@ class Setter(Object):
         if pre:
             self[pre] = post
 
-
 class Skip(Object):
 
     def __init__(self, txt):
         super().__init__()
-        pre = post = ""
+        pre = ""
         if txt.endswith("-"):
             try:
-                pre, post = txt.split("=")
+                pre, _post = txt.split("=")
             except ValueError:
                 try:
-                    pre, post = txt.split("==")
+                    pre, _post = txt.split("==")
                 except ValueError:
                     pre = txt
         if pre:
@@ -107,63 +98,6 @@ class Timed(Object):
             self["from"] = time.time() - v
         if vv:
             self["to"] = time.time() - vv
-
-def parse(o, txt):
-    args = []
-    opts = []
-    o.delta = None
-    o.origtxt = txt
-    o.gets = Object()
-    o.opts = Object()
-    o.sets = Object()
-    o.skip = Object()
-    o.timed = Object()
-    o.index = None
-    for token in [Token(txt) for txt in txt.split()]:
-        s = Skip(token.txt)
-        if s:
-            update(o.skip, s)
-            token.txt = token.txt[:-1]
-        t = Timed(token.txt)
-        if t:
-            update(o.timed, t)
-            continue
-        g = Getter(token.txt)
-        if g:
-            update(o.gets, g)
-            continue
-        s = Setter(token.txt)
-        if s:
-            update(o.sets, s)
-            update(o, s)
-            continue
-        opt = Option(token.txt)
-        if opt.opt:
-            try:
-                o.index = int(opt.opt)
-                continue
-            except ValueError:
-                pass
-            o.opts[opt.opt] = True
-            continue
-        args.append(token.txt)
-    if not args:
-        o.args = []
-        o.cmd = ""
-        o.rest = ""
-        o.txt = ""
-        return o
-    o.cmd = args[0]
-    o.args = args[1:]
-    o.txt = " ".join(args)
-    o.rest = " ".join(args[1:])
-    return o
-
-def day():
-    return str(datetime.datetime.today()).split()[0]
-
-def days(path):
-    return elapsed(time.time() - fntime(path))
 
 def elapsed(seconds, short=True):
     txt = ""
@@ -201,28 +135,87 @@ def elapsed(seconds, short=True):
         return txt
     if sec == 0:
         txt += "0s"
-    #elif sec < 1 or not short:
-    #    txt += "%.3fs" % sec
     else:
         txt += "%ss" % int(sec)
     txt = txt.strip()
     return txt
 
-def get_time(daystr):
+def parse(o, txt):
+    args = []
+    o.txt = txt
+    o.otxt = txt
+    o.gets = Default()
+    o.opts = Default()
+    o.sets = Default()
+    o.skip = Default()
+    o.timed = ()
+    o.index = None
+    for token in [Token(txt) for txt in txt.split()]:
+        s = Skip(token.txt)
+        if s:
+            update(o.skip, s)
+            token.txt = token.txt[:-1]
+        t = Timed(token.txt)
+        if t:
+            update(o.timed, t)
+            continue
+        g = Getter(token.txt)
+        if g:
+            update(o.gets, g)
+            continue
+        s = Setter(token.txt)
+        if s:
+            update(o.sets, s)
+            continue
+        opt = Option(token.txt)
+        if opt:
+            try:
+                o.index = int(opt.opt)
+                continue
+            except ValueError:
+                pass
+            if len(opt.opt) > 1:
+                for op in opt.opt:
+                    o.opts[op] = True
+            else:
+                o.opts[opt.opt] = True
+            continue
+        args.append(token.txt)
+    if not args:
+        o.args = []
+        o.cmd = ""
+        o.rest = ""
+        o.txt = ""
+        return o
+    o.cmd = args[0]
+    o.args = args[1:]
+    o.txt = " ".join(args)
+    o.rest = " ".join(args[1:])
+    return o
+
+def parse_time(daystring):
+    line = ""
+    daystr = str(daystring)
+    for word in daystr.split():
+        if "-" in word:
+            line += word + " "
+        elif ":" in word:
+            line += word
+    if "-" not in line:
+        line = day() + " " + line
     for f in year_formats:
         try:
-            t = time.mktime(time.strptime(daystr, f))
+            t = time.mktime(time.strptime(line, f))
             return t
         except ValueError:
             pass
 
-def parse_time(daystr):
+def parse_ymd(daystr):
     if not any([c.isdigit() for c in daystr]):
         return 0
     valstr = ""
     val = 0
     total = 0
-    nr = 0
     for c in daystr:
         try:
             vv = int(valstr)
@@ -242,21 +235,3 @@ def parse_time(daystr):
             valstr += c
         total += val
     return total
-
-def today():
-    return datetime.datetime.today().timestamp()
-
-def to_day(daystring):
-    line = ""
-    daystr = str(daystring)
-    for word in daystr.split():
-        if "-" in word:
-            line += word + " "
-        elif ":" in word:
-            line += word
-    if "-" not in line:
-        line = day() + " " + line
-    try:
-        return get_time(line.strip())
-    except ValueError:
-        pass

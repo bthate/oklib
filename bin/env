@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+
+import os, sys
+
+old =  os.getcwd()
+
+try:
+    pn = sys.argv[1]
+except IndexError:
+    pn = old.split(os.sep)[-1].lower()
+
+def open(txt):
+    try:
+        for line in os.popen(txt).readlines():
+            print(line.rstrip())
+    except:
+        pass
+
+def main():
+    open("bin/clean")
+    try:
+        shutil.rmtree("build")
+    except:
+        pass
+    try:
+        shutil.rmtree("dist")
+    except:
+        pass
+    try:
+        shutil.rmtree("%s.egg-info" % pn)
+    except:
+        pass
+    for line in os.popen("python3 setup.py sdist").readlines():
+        print(line.strip())
+    open("python3 -mvirtualenv -p python3 env")
+    open("env/bin/pip3 install %s -f dist --force-reinstall" % pn)
+
+if __name__ == "__main__":
+    main()
+    open("tar zcf env.tar.gz env")
