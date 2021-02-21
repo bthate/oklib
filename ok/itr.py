@@ -8,7 +8,8 @@ def find_cmds(mod):
     for key, o in inspect.getmembers(mod, inspect.isfunction):
         if "event" in o.__code__.co_varnames:
             if o.__code__.co_argcount == 1:
-                cmds[key] = o
+                if key not in cmds:
+                    cmds[key] = o
     return cmds
 
 def find_funcs(mod):
@@ -16,7 +17,8 @@ def find_funcs(mod):
     for key, o in inspect.getmembers(mod, inspect.isfunction):
         if "event" in o.__code__.co_varnames:
             if o.__code__.co_argcount == 1:
-                funcs[key] = "%s.%s" % (o.__module__, o.__name__)
+                if key not in funcs:
+                    funcs[key] = "%s.%s" % (o.__module__, o.__name__)
     return funcs
 
 def find_mods(mod):
@@ -24,7 +26,8 @@ def find_mods(mod):
     for key, o in inspect.getmembers(mod, inspect.isfunction):
         if "event" in o.__code__.co_varnames:
             if o.__code__.co_argcount == 1:
-                mods[key] = o.__module__
+                if key not in mods:
+                    mods[key] = o.__module__
     return mods
 
 def find_classes(mod):

@@ -461,7 +461,7 @@ class Users(Object):
 
     def get_users(self, origin=""):
         s = {"user": origin}
-        return find("opbot.usr.User", s)
+        return find("ok.irc.User", s)
 
     def get_user(self, origin):
         u = list(self.get_users(origin))
@@ -510,7 +510,7 @@ def dlt(event):
     if not event.args:
         return
     selector = {"user": event.args[0]}
-    for fn, o in find("op.irc.User", selector):
+    for fn, o in find("ok.irc.User", selector):
         o._deleted = True
         o.save()
         event.reply("ok")

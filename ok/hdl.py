@@ -115,7 +115,9 @@ class Handler(Object):
             from .tbl import tbl
         else:
             tbl = args[0]
-        self.update(tbl)
+        self.names.update(tbl["names"])
+        self.modnames.update(tbl["modnames"])
+        self.pnames.update(tbl["pnames"])
 
     def add(self, cmd, func):
         self.cmds[cmd] = func

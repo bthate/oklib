@@ -1,11 +1,7 @@
-# OPLIB - Object Programming (test_object.py)
-#
-# this file is placed in the public domain
-
 import unittest
 
-from op.dbs import last
-from op.obj import O, Object, load, save
+from ok.dbs import last
+from ok.obj import O, Object
 
 class Test_Object(unittest.TestCase):
 
@@ -27,7 +23,7 @@ class Test_Object(unittest.TestCase):
 
     def test_intern3(self):
         o = Object()
-        self.assertTrue("<op.obj.Object object at" in repr(o))
+        self.assertTrue("<ok.obj.Object object at" in repr(o))
 
     def test_intern4(self):
         o = Object()
@@ -49,33 +45,33 @@ class Test_Object(unittest.TestCase):
 
     def test_stamp(self):
         o = Object()
-        save(o)
+        o.save()
         self.assertTrue(o.__type__)
 
     def test_attribute(self):
         o = Object()
         o.bla = "test"
-        p = save(o)
+        p = o.save()
         oo = Object()
-        load(oo, p)
+        oo.load(p)
         self.assertEqual(oo.bla, "test")
 
     def test_changeattr(self):
         o = Object()
         o.bla = "test"
-        p = save(o)
+        p = o.save()
         oo = Object()
-        load(oo, p)
+        oo.load(p)
         oo.bla = "mekker"
-        pp = save(oo)
+        pp = oo.save()
         ooo = Object()
-        load(ooo, pp)
+        ooo.load(pp)
         self.assertEqual(ooo.bla, "mekker")
 
     def test_last(self):
         o = Object()
         o.bla = "test"
-        save(o)
+        o.save()
         oo = Object()
         last(oo)
         self.assertEqual(oo.bla, "test")
@@ -83,11 +79,11 @@ class Test_Object(unittest.TestCase):
     def test_lastest(self):
         o = Object()
         o.bla = "test"
-        save(o)
+        o.save()
         oo = Object()
         last(oo)
         oo.bla = "mekker"
-        save(oo)
+        oo.save()
         ooo = Object()
         last(ooo)
         self.assertEqual(ooo.bla, "mekker")

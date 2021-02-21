@@ -1,6 +1,6 @@
 import threading, time
 
-from .obj import Object, get, update
+from .obj import Object
 from .hdl import Bus
 from .prs import elapsed
 from .utl import get_name
@@ -22,8 +22,8 @@ def thr(event):
         if str(thr).startswith("<_"):
             continue
         o = Object()
-        update(o, thr)
-        if get(o, "sleep", None):
+        o.update(thr)
+        if o.get("sleep", None):
             up = o.sleep - int(time.time() - o.state.latest)
         else:
             up = int(time.time() - starttime)

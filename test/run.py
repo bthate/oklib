@@ -1,6 +1,6 @@
-from op.hdl import Command, Test
-from op.itr import walk
-from op.obj import cfg
+from ok.hdl import Command, Test
+from ok.itr import walk
+from ok.obj import cfg
 
 from test.prm import param
 

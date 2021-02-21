@@ -1,10 +1,6 @@
-# OPLIB - Object Programming Library (test_tinder.py)
-#
-# This file is placed in the Public Domain.
-
 import os, unittest
 
-from op.obj import cfg
+from ok.obj import cfg
 
 from test.run import exec, h
 

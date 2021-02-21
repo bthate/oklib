@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
-from op.obj import Object
-from op.hdl import Command
+from ok.obj import Object
+from ok.hdl import Command
 
 param = Object()
 param.add = ["test@shell", "bart"]

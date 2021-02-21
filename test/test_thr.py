@@ -4,8 +4,8 @@
 
 import os, unittest
 
-from op.obj import cfg
-from op.thr import launch
+from ok.obj import cfg
+from ok.thr import launch
 
 from test.run import exec, consume, h
 

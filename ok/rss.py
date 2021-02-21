@@ -96,9 +96,9 @@ class Fetcher(Object):
             counter += 1
             objs.append(f)
             if self.cfg.dosave:
-                save(f)
+                f.save()
         if objs:
-            save(Fetcher.seen)
+            Fetcher.seen.save()
         for o in objs:
             txt = self.display(o)
             Bus.announce(txt)
@@ -106,7 +106,7 @@ class Fetcher(Object):
 
     def run(self):
         thrs = []
-        for fn, o in all("op.rss.Rss"):
+        for fn, o in all("ok.rss.Rss"):
             #d = Default(o)
             thrs.append(launch(self.fetch, o))
         return thrs
@@ -119,7 +119,7 @@ class Fetcher(Object):
             repeater.start()
 
     def stop(self):
-        save(self.seen)
+        self.seen.save()
 
 def get_feed(url):
     if cfg.debug:
@@ -140,7 +140,7 @@ def dpl(event):
     if len(event.args) < 2:
         return
     setter = {"display_list": event.args[1]}
-    for fn, o in last_match("op.rss.Rss", {"rss": event.args[0]}):
+    for fn, o in last_match("ok.rss.Rss", {"rss": event.args[0]}):
         o.edit(setter)
         o.save()
         event.reply("ok")
@@ -163,22 +163,22 @@ def rem(event):
     selector = {"rss": event.args[0]}
     nr = 0
     got = []
-    for fn, o in find("op.rss.Rss", selector):
+    for fn, o in find("ok.rss.Rss", selector):
         nr += 1
         o._deleted = True
         got.append(o)
     for o in got:
-        save(o)
+        o.save()
     event.reply("ok")
 
 def rss(event):
     if not event.args:
         return
     url = event.args[0]
-    res = list(find("op.rss.Rss", {"rss": url}))
+    res = list(find("ok.rss.Rss", {"rss": url}))
     if res:
         return
     o = Rss()
     o.rss = event.args[0]
-    save(o)
+    o.save()
     event.reply("ok")

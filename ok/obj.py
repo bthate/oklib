@@ -61,6 +61,10 @@ class Obj(O):
         setattr(self, k, v)
 
     def update(self, d):
+        try:
+            d = vars(d)
+        except TypeError:
+            pass
         return self.__dict__.update(d)
 
     def values(self):
@@ -69,7 +73,6 @@ class Obj(O):
 class Object(Obj):
 
     __slots__ = ("__id__", "__type__", "__stp__")
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -136,7 +139,7 @@ class Object(Obj):
             except json.decoder.JSONDecodeError as ex:
                 return
             if v:
-                update(o, v)
+                self.update(v)
         self.__id__ = id
         self.__type__ = typ
         self.__stp__ = stp
@@ -145,11 +148,11 @@ class Object(Obj):
     def save(self, stime=None):
         assert cfg.wd
         if stime:
-            stp = os.path.join(o.__type__, o.__id__,
+            stp = os.path.join(self.__type__, self.__id__,
                                stime + "." + str(random.randint(0, 100000)))
         else:
             timestamp = str(datetime.datetime.now()).split()
-            stp = os.path.join(o.__type__, o.__id__, os.sep.join(timestamp))
+            stp = os.path.join(self.__type__, self.__id__, os.sep.join(timestamp))
         opath = os.path.join(cfg.wd, "store", stp)
         cdir(opath)
         with open(opath, "w") as ofile:
@@ -158,16 +161,16 @@ class Object(Obj):
         self.__stp__ = stp
         return stp
 
-    def scan(o, txt):
-        for _k, v in items(o):
+    def scan(self, txt):
+        for _k, v in self.items():
             if txt in str(v):
                 return True
         return False
 
-    def search(o, s):
+    def search(self, s):
         ok = False
-        for k, v in items(s):
-            vv = get(o, k)
+        for k, v in s.items():
+            vv = self.get(k)
             if v not in str(vv):
                 ok = False
                 break
@@ -202,7 +205,9 @@ class Ol(Object):
     def append(self, key, value):
         if key not in self:
             self[key] = []
-        if isinstance(value, type(list)):
+        if value in self[key]:
+            return
+        if isinstance(value, list):
             self[key].extend(value)
         else:
             self[key].append(value)
@@ -240,7 +245,7 @@ def get_type(o):
     t = type(o)
     if t == type:
         try:
-            return "%s.%s" % (o.__module__, o.__name__)
+            return "%s.%s" % (self.__module__, self.__name__)
         except AttributeError:
             pass
     return str(type(o)).split()[-1][1:-2]
@@ -254,7 +259,7 @@ def hook(hfn):
     fn = os.sep.join(oname)
     cls = get_cls(cname)
     o = cls()
-    load(o, fn)
+    o.load(fn)
     return o
 
 def hooked(d):

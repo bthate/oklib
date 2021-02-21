@@ -1,5 +1,5 @@
 from .dbs import find
-from .obj import Object, save
+from .obj import Object
 
 class Log(Object):
 
@@ -17,9 +17,9 @@ def dne(event):
     if not event.args:
         return
     selector = {"txt": event.args[0]}
-    for fn, o in find("op.ent.Todo", selector):
+    for fn, o in find("ok.ent.Todo", selector):
         o._deleted = True
-        save(o)
+        o.save()
         event.reply("ok")
         break
 
@@ -28,7 +28,7 @@ def log(event):
         return
     l = Log()
     l.txt = event.rest
-    save(l)
+    l.save()
     event.reply("ok")
 
 def tdo(event):
@@ -36,5 +36,5 @@ def tdo(event):
         return
     o = Todo()
     o.txt = event.rest
-    save(o)
+    o.save()
     event.reply("ok")

@@ -1,9 +1,7 @@
-# This file is placed in the Public Domain.
-
 import unittest
 
-from op.obj import cfg
-from op.sel import Select
+from ok.obj import cfg
+from ok.sel import Select
 
 from test.run import exec
 
