@@ -231,7 +231,7 @@ class Handler(Object):
         self.stopped = True
         self.queue.put(None)
 
-    def walk(self, nms="op"):
+    def walk(self, nms="ok"):
         w = walk(nms)
         update(self, w)
         for c, mn in items(w.modnames):

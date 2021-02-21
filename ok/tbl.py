@@ -1,178 +1,142 @@
 tbl = {
     "modnames": {
-        "cfg": "op.irc",
-        "cmd": "op.cmd",
-        "cpy": "op.cli",
-        "dlt": "op.irc",
-        "dne": "op.ent",
-        "dpl": "op.rss",
-        "flt": "op.sys",
-        "fnd": "op.fnd",
-        "ftc": "op.rss",
-        "log": "op.ent",
-        "met": "op.irc",
-        "rem": "op.rss",
-        "rss": "op.rss",
-        "set": "op.cli",
-        "tdo": "op.ent",
-        "thr": "op.sys",
-        "upt": "op.sys"
+        "cfg": "ok.irc",
+        "cmd": "ok.cmd",
+        "cpy": "ok.cli",
+        "dlt": "ok.irc",
+        "dne": "ok.ent",
+        "dpl": "ok.rss",
+        "flt": "ok.sys",
+        "fnd": "ok.fnd",
+        "ftc": "ok.rss",
+        "log": "ok.ent",
+        "met": "ok.irc",
+        "rem": "ok.rss",
+        "rss": "ok.rss",
+        "set": "ok.cli",
+        "tdo": "ok.ent",
+        "thr": "ok.sys",
+        "upt": "ok.sys"
     },
     "names": {
         "bus": [
-            "op.hdl.Bus"
+            "ok.hdl.Bus"
         ],
         "bused": [
-            "op.hdl.Bused"
+            "ok.hdl.Bused"
         ],
         "cfg": [
-            "op.obj.Cfg",
-            "op.rss.Cfg",
-            "op.udp.Cfg",
-            "op.shl.Cfg",
-            "op.irc.Cfg"
+            "ok.irc.Cfg"
         ],
         "command": [
-            "op.hdl.Command"
+            "ok.hdl.Command"
         ],
         "core": [
-            "op.hdl.Core"
+            "ok.hdl.Core"
         ],
         "dcc": [
-            "op.irc.DCC"
+            "ok.irc.DCC"
         ],
         "default": [
-            "op.obj.Default"
-        ],
-        "edisconnect": [
-            "op.sel.EDISCONNECT"
-        ],
-        "enoclass": [
-            "op.obj.ENOCLASS"
-        ],
-        "enofilename": [
-            "op.obj.ENOFILENAME"
-        ],
-        "enouser": [
-            "op.irc.ENOUSER"
+            "ok.obj.Default"
         ],
         "event": [
-            "op.hdl.Event",
-            "op.irc.Event"
+            "ok.irc.Event"
         ],
         "feed": [
-            "op.rss.Feed"
+            "ok.rss.Feed"
         ],
         "fetcher": [
-            "op.rss.Fetcher"
+            "ok.rss.Fetcher"
         ],
         "getter": [
-            "op.prs.Getter"
+            "ok.prs.Getter"
         ],
         "handler": [
-            "op.hdl.Handler"
-        ],
-        "httperror": [
-            "urllib.error.HTTPError"
+            "ok.hdl.Handler"
         ],
         "irc": [
-            "op.irc.IRC"
+            "ok.irc.IRC"
         ],
         "log": [
-            "op.ent.Log"
-        ],
-        "o": [
-            "op.obj.O"
+            "ok.ent.Log"
         ],
         "object": [
-            "op.obj.Object"
+            "ok.obj.Object"
         ],
         "ol": [
-            "op.obj.Ol"
+            "ok.obj.Ol"
         ],
         "option": [
-            "op.prs.Option"
+            "ok.prs.Option"
         ],
         "repeater": [
-            "op.clk.Repeater"
-        ],
-        "request": [
-            "urllib.request.Request"
+            "ok.clk.Repeater"
         ],
         "rss": [
-            "op.rss.Rss"
+            "ok.rss.Rss"
         ],
         "seen": [
-            "op.rss.Seen"
+            "ok.rss.Seen"
         ],
         "select": [
-            "op.sel.Select"
+            "ok.sel.Select"
         ],
         "setter": [
-            "op.prs.Setter"
+            "ok.prs.Setter"
         ],
         "shell": [
-            "op.shl.Shell"
+            "ok.shl.Shell"
         ],
         "skip": [
-            "op.prs.Skip"
+            "ok.prs.Skip"
         ],
         "test": [
-            "op.hdl.Test"
-        ],
-        "textwrap": [
-            "op.irc.TextWrap"
-        ],
-        "thr": [
-            "op.thr.Thr"
+            "ok.hdl.Test"
         ],
         "timed": [
-            "op.prs.Timed"
+            "ok.prs.Timed"
         ],
         "timer": [
-            "op.clk.Timer"
+            "ok.clk.Timer"
         ],
         "todo": [
-            "op.ent.Todo"
+            "ok.ent.Todo"
         ],
         "token": [
-            "op.prs.Token"
+            "ok.prs.Token"
         ],
         "udp": [
-            "op.udp.UDP"
-        ],
-        "urlerror": [
-            "urllib.error.URLError"
+            "ok.udp.UDP"
         ],
         "user": [
-            "op.irc.User"
+            "ok.irc.User"
         ],
         "users": [
-            "op.irc.Users"
+            "ok.irc.Users"
         ]
     },
     "pnames": {
-        "all": "op.all",
-        "cli": "op.cli",
-        "clk": "op.clk",
-        "cmd": "op.cmd",
-        "dbs": "op.dbs",
-        "ent": "op.ent",
-        "fnd": "op.fnd",
-        "hdl": "op.hdl",
-        "irc": "op.irc",
-        "itr": "op.itr",
-        "obj": "op.obj",
-        "prs": "op.prs",
-        "rss": "op.rss",
-        "sel": "op.sel",
-        "shl": "op.shl",
-        "spc": "op.spc",
-        "sys": "op.sys",
-        "tbl": "op.tbl",
-        "thr": "op.thr",
-        "trm": "op.trm",
-        "udp": "op.udp",
-        "utl": "op.utl"
+        "all": "ok.all",
+        "cli": "ok.cli",
+        "clk": "ok.clk",
+        "cmd": "ok.cmd",
+        "dbs": "ok.dbs",
+        "ent": "ok.ent",
+        "fnd": "ok.fnd",
+        "hdl": "ok.hdl",
+        "irc": "ok.irc",
+        "itr": "ok.itr",
+        "obj": "ok.obj",
+        "prs": "ok.prs",
+        "rss": "ok.rss",
+        "sel": "ok.sel",
+        "shl": "ok.shl",
+        "sys": "ok.sys",
+        "tbl": "ok.tbl",
+        "thr": "ok.thr",
+        "trm": "ok.trm",
+        "udp": "ok.udp",
+        "utl": "ok.utl"
     }
 }

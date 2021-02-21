@@ -75,7 +75,7 @@ def get_exception(txt="", sep=" "):
         res = []
         for x in elem[0].split(os.sep)[::-1]:
             res.append(x)
-            if x in ["op"]:
+            if x in ["ok"]:
                 break
         result.append("%s:%s" % (os.sep.join(res[::-1]), elem[1]))
     res = "%s %s: %s %s" % (sep.join(result), exctype, excvalue, str(txt))
