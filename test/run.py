@@ -1,6 +1,6 @@
 from op.hdl import Command, Test
 from op.itr import walk
-from op.obj import cfg, get, update
+from op.obj import cfg
 
 from test.prm import param
 
@@ -21,7 +21,7 @@ def consume(elems):
     return res
 
 def exec(cmd):
-    exs = get(param, cmd, [""])
+    exs = param.get(cmd, [""])
     e = list(exs)
     events = []
     nr = 0
@@ -34,7 +34,7 @@ def exec(cmd):
     return events
 
 h = Test()
-h.walk("mod,op")
+h.walk("mod,ok")
 h.start()
 
 for e in exec("rss https://www.reddit.com/r/python/.rss"):

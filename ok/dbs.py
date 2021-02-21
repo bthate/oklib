@@ -1,4 +1,4 @@
-from .obj import cfg, get_type, hook, search, update, os
+from .obj import cfg, get_type, hook, os
 from .utl import fntime
 
 def all(otype, selector=None, index=None, timed=None):
@@ -7,7 +7,7 @@ def all(otype, selector=None, index=None, timed=None):
         selector = {}
     for fn in fns(otype, timed):
         o = hook(fn)
-        if selector and not search(o, selector):
+        if selector and not o.search(selector):
             continue
         if "_deleted" in o and o._deleted:
             continue
@@ -30,7 +30,7 @@ def every(selector=None, index=None, timed=None):
     for otype in os.listdir(os.path.join(cfg.wd, "store")):
         for fn in fns(otype, timed):
             o = hook(fn)
-            if selector and not search(o, selector):
+            if selector and not o.search(selector):
                 continue
             if "_deleted" in o and o._deleted:
                 continue
@@ -45,7 +45,7 @@ def find(otype, selector=None, index=None, timed=None):
         selector = {}
     for fn in fns(otype, timed):
         o = hook(fn)
-        if selector and not search(o, selector):
+        if selector and not o.search(selector):
             continue
         if "_deleted" in o and o._deleted:
             continue
@@ -59,7 +59,7 @@ def find_event(e):
     nr = -1
     for fn in fns(e.otype, e.timed):
         o = hook(fn)
-        if e.gets and not search(o, e.gets):
+        if e.gets and not o.search(e.gets):
             continue
         if "_deleted" in o and o._deleted:
             continue
@@ -92,7 +92,7 @@ def fns(name, timed=None):
 def last(o):
     path, l = last_fn(str(get_type(o)))
     if  l:
-        update(o, l)
+        o.update(l)
     if path:
         spl = path.split(os.sep)
         stp = os.sep.join(spl[-4:])

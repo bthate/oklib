@@ -1,6 +1,6 @@
 # This file is placed in the Public Domain.
 
-from op.obj import Object, get
+from op.obj import Object
 from op.hdl import Command
 
 param = Object()
@@ -23,7 +23,7 @@ param.tdo = ["test4", ""]
 param.mbx = ["~/Desktop/25-1-2013", ""]
 
 def exec(h, cmd):
-    exs = get(param, cmd, [""])
+    exs = param.get(cmd, [""])
     e = list(exs)
     events = []
     nr = 0

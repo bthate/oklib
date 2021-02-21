@@ -36,16 +36,143 @@ class O:
     def __str__(self):
         return json.dumps(self, default=default, sort_keys=True)
 
-class Object(O):
-
-    __slots__ = ("__id__", "__type__", "__stp__")
+class Obj(O):
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self.__id__ = str(uuid.uuid4())
-        self.__type__ = get_type(self)
         if args:
             self.__dict__.update(args[0])
+
+    def get(self, k, d=None):
+        if isinstance(self, dict):
+            return self.get(k, d)
+        return self.__dict__.get(k, d)
+
+    def items(self):
+        return self.__dict__.items()
+
+    def keys(self):
+        return self.__dict__.keys()
+
+    def register(self, k, v):
+        self.__dict__[k] = v
+
+    def set(self, k, v):
+        setattr(self, k, v)
+
+    def update(self, d):
+        return self.__dict__.update(d)
+
+    def values(self):
+        return self.__dict__.values()
+
+class Object(Obj):
+
+    __slots__ = ("__id__", "__type__", "__stp__")
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__id__ = str(uuid.uuid4())
+        self.__type__ = get_type(self)
+
+    def edit(self, setter, skip=False):
+        try:
+            setter = vars(setter)
+        except (TypeError, ValueError):
+            pass
+        if not setter:
+            setter = {}
+        count = 0
+        for key, value in setter.items():
+            if skip and value == "":
+                continue
+            count += 1
+            if value in ["True", "true"]:
+                self[key] = True
+            elif value in ["False", "false"]:
+                self[key] = False
+            else:
+                self[key] = value
+        return count
+
+    def format(self, keys=None, skip=None):
+        if keys is None:
+            keys = vars(self).keys()
+        if skip is None:
+            skip = []
+        res = []
+        txt = ""
+        for key in keys:
+            if key in skip:
+                continue
+            try:
+                val = self[key]
+            except KeyError:
+                continue
+            if not val:
+                continue
+            val = str(val).strip()
+            res.append((key, val))
+        result = []
+        for k, v in res:
+            result.append("%s=%s%s" % (k, v, " "))
+        txt += " ".join([x.strip() for x in result])
+        return txt.strip()
+
+    def load(self, opath):
+        assert opath
+        assert cfg.wd
+        if opath.count(os.sep) != 3:
+            raise ENOFILENAME(opath)
+        spl = opath.split(os.sep)
+        stp = os.sep.join(spl[-4:])
+        lpath = os.path.join(cfg.wd, "store", stp)
+        typ = spl[0]
+        id = spl[1]
+        with open(lpath, "r") as ofile:
+            try:
+                v = json.load(ofile, object_hook=hooked)
+            except json.decoder.JSONDecodeError as ex:
+                return
+            if v:
+                update(o, v)
+        self.__id__ = id
+        self.__type__ = typ
+        self.__stp__ = stp
+        return stp
+
+    def save(self, stime=None):
+        assert cfg.wd
+        if stime:
+            stp = os.path.join(o.__type__, o.__id__,
+                               stime + "." + str(random.randint(0, 100000)))
+        else:
+            timestamp = str(datetime.datetime.now()).split()
+            stp = os.path.join(o.__type__, o.__id__, os.sep.join(timestamp))
+        opath = os.path.join(cfg.wd, "store", stp)
+        cdir(opath)
+        with open(opath, "w") as ofile:
+            json.dump(self, ofile, default=default)
+        os.chmod(opath, 0o444)
+        self.__stp__ = stp
+        return stp
+
+    def scan(o, txt):
+        for _k, v in items(o):
+            if txt in str(v):
+                return True
+        return False
+
+    def search(o, s):
+        ok = False
+        for k, v in items(s):
+            vv = get(o, k)
+            if v not in str(vv):
+                ok = False
+                break
+            ok = True
+        return ok
 
 class Default(Object):
 
@@ -144,89 +271,6 @@ def default(o):
         return o
     return repr(o)
 
-def edit(o, setter, skip=False):
-    try:
-        setter = vars(setter)
-    except (TypeError, ValueError):
-        pass
-    if not setter:
-        setter = {}
-    count = 0
-    for key, value in setter.items():
-        if skip and value == "":
-            continue
-        count += 1
-        if value in ["True", "true"]:
-            o[key] = True
-        elif value in ["False", "false"]:
-            o[key] = False
-        else:
-            o[key] = value
-    return count
-
-def format(o, keys=None, skip=None):
-    if keys is None:
-        keys = vars(o).keys()
-    if skip is None:
-        skip = []
-    res = []
-    txt = ""
-    for key in keys:
-        if key in skip:
-            continue
-        try:
-            val = o[key]
-        except KeyError:
-            continue
-        if not val:
-            continue
-        val = str(val).strip()
-        res.append((key, val))
-    result = []
-    for k, v in res:
-        result.append("%s=%s%s" % (k, v, " "))
-    txt += " ".join([x.strip() for x in result])
-    return txt.strip()
-
-def get(o, k, d=None):
-    if isinstance(o, dict):
-        return o.get(k, d)
-    return o.__dict__.get(k, d)
-
-def items(o):
-    try:
-        return o.items()
-    except (TypeError, AttributeError):
-        return o.__dict__.items()
-
-def keys(o):
-    try:
-        return o.keys()
-    except (TypeError, AttributeError):
-        return o.__dict__.keys()
-
-def load(o, opath):
-    assert opath
-    assert cfg.wd
-    if opath.count(os.sep) != 3:
-        raise ENOFILENAME(opath)
-    spl = opath.split(os.sep)
-    stp = os.sep.join(spl[-4:])
-    lpath = os.path.join(cfg.wd, "store", stp)
-    typ = spl[0]
-    id = spl[1]
-    with open(lpath, "r") as ofile:
-        try:
-            v = json.load(ofile, object_hook=hooked)
-        except json.decoder.JSONDecodeError as ex:
-            return
-        if v:
-            update(o, v)
-    o.__id__ = id
-    o.__type__ = typ
-    o.__stp__ = stp
-    return stp
-
 def mkstamp(o):
     timestamp = str(datetime.datetime.now()).split()
     return os.path.join(get_type(o), str(uuid.uuid4()), os.sep.join(timestamp))
@@ -234,58 +278,8 @@ def mkstamp(o):
 def ojson(o, *args, **kwargs):
     return json.dumps(o, default=default, *args, **kwargs)
 
-def register(o, k, v):
-    o[k] = v
-
-def save(o, stime=None):
-    assert cfg.wd
-    if stime:
-        stp = os.path.join(o.__type__, o.__id__,
-                           stime + "." + str(random.randint(0, 100000)))
-    else:
-        timestamp = str(datetime.datetime.now()).split()
-        stp = os.path.join(o.__type__, o.__id__, os.sep.join(timestamp))
-    opath = os.path.join(cfg.wd, "store", stp)
-    cdir(opath)
-    with open(opath, "w") as ofile:
-        json.dump(o, ofile, default=default)
-    os.chmod(opath, 0o444)
-    o.__stp__ = stp
-    return stp
-
-def scan(o, txt):
-    for _k, v in items(o):
-        if txt in str(v):
-            return True
-    return False
-
-def set(o, k, v):
-    setattr(o, k, v)
-
-def search(o, s):
-    ok = False
-    for k, v in items(s):
-        vv = get(o, k)
-        if v not in str(vv):
-            ok = False
-            break
-        ok = True
-    return ok
-
 def tojson(d):
     return json.dumps(d, default=default, indent=4, sort_keys=True)
-
-def update(o, d):
-    try:
-        return o.__dict__.update(vars(d))
-    except TypeError:
-        return o.__dict__.update(d)
-
-def values(o):
-    try:
-        return o.values()
-    except (TypeError, AttributeError):
-        return o.__dict__.values()
 
 def xdir(o, skip=None):
     res = []

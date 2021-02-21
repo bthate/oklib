@@ -1,7 +1,7 @@
 import os, queue, socket, textwrap, time, threading, _thread
 
 from .dbs import find, last
-from .obj import Cfg, Object, format, get, save, update
+from .obj import Cfg, Object
 from .hdl import Bus, Event, Handler, cmd
 from .prs import parse
 from .thr import launch
@@ -308,9 +308,9 @@ class IRC(Handler):
 
     def start(self, cfg=None):
         if cfg is not None:
-            update(self.cfg, cfg)
+            self.cfg.update(cfg)
         else:
-            last(self.cfg)
+            self.cfg.last()
         assert self.cfg.channel
         assert self.cfg.server
         self.channels.append(self.cfg.channel)
@@ -443,7 +443,7 @@ class Users(Object):
 
     def allowed(self, origin, perm):
         perm = perm.upper()
-        origin = get(self.userhosts, origin, origin)
+        origin = self.userhosts.get(origin, origin)
         user = self.get_user(origin)
         if user:
             if perm in user.perms:
@@ -454,7 +454,7 @@ class Users(Object):
         for user in self.get_users(origin):
             try:
                 user.perms.remove(perm)
-                save(user)
+                user.save()
                 return True
             except ValueError:
                 pass
@@ -475,7 +475,7 @@ class Users(Object):
         user = User()
         user.user = origin
         user.perms = ["USER", ]
-        save(user)
+        user.save()
         return user
 
     def oper(self, origin):
@@ -485,7 +485,7 @@ class Users(Object):
         user = User()
         user.user = origin
         user.perms = ["OPER", "USER"]
-        save(user)
+        user.save()
         return user
 
     def perm(self, origin, permission):
@@ -494,16 +494,16 @@ class Users(Object):
             raise ENOUSER(origin)
         if permission.upper() not in user.perms:
             user.perms.append(permission.upper())
-            save(user)
+            user.save()
         return user
 
 def cfg(event):
     c = Cfg()
     last(c)
     if event.prs and not event.prs.sets:
-        return event.reply(format(c, skip=["username", "realname"]))
-    update(c, event.prs.sets)
-    save(c)
+        return event.reply(c.format(skip=["username", "realname"]))
+    c.update(event.prs.sets)
+    c.save()
     event.reply("ok")
 
 def dlt(event):
@@ -512,7 +512,7 @@ def dlt(event):
     selector = {"user": event.args[0]}
     for fn, o in find("op.irc.User", selector):
         o._deleted = True
-        save(o)
+        o.save()
         event.reply("ok")
         break
 
@@ -522,5 +522,5 @@ def met(event):
     user = User()
     user.user = event.rest
     user.perms = ["USER"]
-    save(user)
+    user.save()
     event.reply("ok")

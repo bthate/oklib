@@ -1,6 +1,6 @@
 import inspect
 
-from .obj import Object, Ol, update
+from .obj import Object, Ol
 from .utl import direct, spl, os
 
 def find_cmds(mod):
@@ -69,7 +69,7 @@ def walk(names):
     for mn in find_all(names):
         mod = direct(mn)
         oo.pnames[mn.split(".")[-1]] = mn
-        update(oo.modnames, find_mods(mod))
-        update(oo.names, find_names(mod))
+        oo.modnames.update(find_mods(mod))
+        oo.names.update(find_names(mod))
     return oo
 

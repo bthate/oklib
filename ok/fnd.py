@@ -1,4 +1,4 @@
-from .obj import cfg, format, keys
+from .obj import cfg
 from .dbs import find, list_files
 from .hdl import Bus
 from .prs import elapsed
@@ -17,7 +17,7 @@ def fnd(event):
     for otype in t:
         for fn, o in find(otype, event.prs.gets, event.prs.index, event.prs.timed):
             nr += 1
-            txt = "%s %s" % (str(nr), format(o, event.xargs or keys(o), skip=event.prs.skip))
+            txt = "%s %s" % (str(nr), o.format(event.xargs or o.keys(), skip=event.prs.skip))
             if "t" in event.prs.opts:
                 txt = txt + " %s" % (elapsed(time.time() - fntime(fn)))
             event.reply(txt)

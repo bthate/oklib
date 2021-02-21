@@ -2,7 +2,7 @@ import urllib
 
 from .clk import Repeater
 from .dbs import all, find, last, last_match
-from .obj import Cfg, Default, Object, cfg, edit, get, save, update
+from .obj import Cfg, Default, Obj, Object, cfg
 from .hdl import Bus
 from .thr import launch
 from .utl import get_tinyurl, get_url, strip_html, unescape
@@ -83,8 +83,8 @@ class Fetcher(Object):
             if not o:
                 continue
             f = Feed()
-            update(f, rssobj)
-            update(f, Object(o))
+            f.update(rssobj)
+            f.update(Obj(o))
             u = urllib.parse.urlparse(f.link)
             if u.path and not u.path == "/":
                 url = "%s://%s/%s" % (u.scheme, u.netloc, u.path)
@@ -141,8 +141,8 @@ def dpl(event):
         return
     setter = {"display_list": event.args[1]}
     for fn, o in last_match("op.rss.Rss", {"rss": event.args[0]}):
-        edit(o, setter)
-        save(o)
+        o.edit(setter)
+        o.save()
         event.reply("ok")
 
 def ftc(event):

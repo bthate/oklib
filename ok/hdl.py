@@ -2,7 +2,7 @@ import inspect, os, queue, sys, threading, time
 import logging
 
 from .itr import find_cmds, walk
-from .obj import Cfg, Default, Object, Ol, cfg, get, items, update
+from .obj import Cfg, Default, Object, Ol, cfg
 from .prs import parse
 from .thr import launch
 from .utl import direct, has_mod, locked, spl
@@ -115,7 +115,7 @@ class Handler(Object):
             from .tbl import tbl
         else:
             tbl = args[0]
-        update(self, tbl)
+        self.update(tbl)
 
     def add(self, cmd, func):
         self.cmds[cmd] = func
@@ -124,8 +124,8 @@ class Handler(Object):
         self.direct(txt)
 
     def clone(self, hdl):
-        update(self.cmds, hdl.cmds)
-        update(self.cbs, hdl.cbs)
+        self.cmds.update(hdl.cmds)
+        self.cbs.update(hdl.cbs)
         self.modnames.update(hdl.modnames)
         self.names.update(hdl.names)
         self.pnames.update(hdl.pnames)
@@ -146,22 +146,22 @@ class Handler(Object):
 
     def get_cmd(self, cmd):
         if cmd not in self.cmds:
-            mn = get(self.modnames, cmd, None)
+            mn = self.modnames.get(cmd, None)
             if mn:
                 mod = self.load(mn)
-        return get(self.cmds, cmd, None)
+        return self.cmds.get(cmd, None)
 
     def get_mod(self, mn):
         if mn in self.table:
             return self.table[mn]
 
     def get_names(self, nm):
-        return get(self.names, nm, [nm,])
+        return self.names.get(nm, [nm,])
 
     def init(self, mns):
         thrs = []
         for mn in spl(mns):
-            mn = get(self.pnames, mn, mn)
+            mn = self.pnames.get(mn, mn)
             mod = self.get_mod(mn)
             if mod and "init" in dir(mod):
                 thrs.append(launch(mod.init, self))
@@ -179,14 +179,14 @@ class Handler(Object):
     @locked(loadlock)
     def load(self, mn):
         mod = direct(mn)
-        update(self.cmds, find_cmds(mod))
+        self.cmds.update(find_cmds(mod))
         self.table[mn] = mod
         return mod
 
     def load_mod(self, mns):
         mods = []
         for mn in spl(mns):
-            mn = get(self.pnames, mn, mn)
+            mn = self.pnames.get(mn, mn)
             mods.append(self.load(mn))
         return mods
         
@@ -233,8 +233,8 @@ class Handler(Object):
 
     def walk(self, nms="ok"):
         w = walk(nms)
-        update(self, w)
-        for c, mn in items(w.modnames):
+        self.update(w)
+        for c, mn in w.modnames.items():
             self.load(mn)
 
     def wait(self):

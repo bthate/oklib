@@ -1,6 +1,6 @@
 import sys
 
-from .obj import Cfg, cfg, update
+from .obj import Cfg, cfg
 from .hdl import Bused, Command
 from .prs import parse as p
 from .thr import launch
@@ -34,5 +34,5 @@ class Shell(Bused):
 def parse():
     c = Cfg()
     p(c, " ".join(sys.argv[1:]))
-    update(cfg, c)
+    cfg.update(c)
     return c

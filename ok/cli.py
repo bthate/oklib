@@ -1,7 +1,7 @@
 import os, shutil
 
 from .dbs import last
-from .obj import Object, cfg, edit, format, save
+from .obj import Object, cfg
 from .prs import parse
 
 def cpy(event):
@@ -26,11 +26,11 @@ def cpy(event):
 
 def set(event):
     if not event.otxt:
-        event.reply(format(cfg))
+        event.reply(cfg.format())
         return
-    last(cfg)
+    cfg.last()
     p = Object()
     parse(p, event.rest)
-    edit(cfg, p)
-    save(cfg)
+    cfg.edit(p)
+    cfg.save()
     event.reply("ok")

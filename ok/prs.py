@@ -1,4 +1,4 @@
-from .obj import Default, Object, update
+from .obj import Default, Object
 from .utl import day, time
 
 year_formats = [
@@ -153,19 +153,19 @@ def parse(o, txt):
     for token in [Token(txt) for txt in txt.split()]:
         s = Skip(token.txt)
         if s:
-            update(o.skip, s)
+            o.skip.update(s)
             token.txt = token.txt[:-1]
         t = Timed(token.txt)
         if t:
-            update(o.timed, t)
+            o.timed.update(t)
             continue
         g = Getter(token.txt)
         if g:
-            update(o.gets, g)
+            o.gets.update(g)
             continue
         s = Setter(token.txt)
         if s:
-            update(o.sets, s)
+            o.sets.update(s)
             continue
         opt = Option(token.txt)
         if opt:
