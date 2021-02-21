@@ -20,12 +20,12 @@ class ENOUSER(Exception):
 
 class Cfg(Cfg):
 
-    channel = "#oplib"
-    nick = "oplib"
+    channel = "#okbot"
+    nick = "okbot"
     port = 6667
     server = "localhost"
-    realname = "object programming library"
-    username = "oplib"
+    realname = "replies with ok"
+    username = "okbot"
 
     def __init__(self):
         super().__init__()
@@ -310,7 +310,7 @@ class IRC(Handler):
         if cfg is not None:
             self.cfg.update(cfg)
         else:
-            self.cfg.last()
+            last(self.cfg)
         assert self.cfg.channel
         assert self.cfg.server
         self.channels.append(self.cfg.channel)
