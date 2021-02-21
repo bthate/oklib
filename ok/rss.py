@@ -2,7 +2,7 @@ import urllib
 
 from .clk import Repeater
 from .dbs import all, find, last, last_match
-from .obj import Cfg, Default, Obj, Object, cfg
+from .obj import Cfg, Default, Object, cfg
 from .hdl import Bus
 from .thr import launch
 from .utl import get_tinyurl, get_url, strip_html, unescape
@@ -84,7 +84,7 @@ class Fetcher(Object):
                 continue
             f = Feed()
             f.update(rssobj)
-            f.update(Obj(o))
+            f.update(Object(o))
             u = urllib.parse.urlparse(f.link)
             if u.path and not u.path == "/":
                 url = "%s://%s/%s" % (u.scheme, u.netloc, u.path)

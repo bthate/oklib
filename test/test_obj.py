@@ -56,6 +56,15 @@ class Test_Object(unittest.TestCase):
         oo.load(p)
         self.assertEqual(oo.bla, "test")
 
+    def test_attrbork(self):
+        o = Object()
+        o.save = "test"
+        print(o.__dict__)
+        p = o.save()
+        oo = Object()
+        oo.load(p)
+        self.assertEqual(oo.save, "test")
+
     def test_changeattr(self):
         o = Object()
         o.bla = "test"

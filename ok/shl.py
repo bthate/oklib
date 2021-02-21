@@ -13,11 +13,7 @@ def init(h):
 
 class Cfg(Cfg):
 
-    def op(self, ops):
-        for o in ops:
-            if o in self.opts:
-                return True
-        return False
+    pass
 
 class Shell(Bused):
 

@@ -247,3 +247,12 @@ def unescape(text):
 
 def useragent(txt):
     return 'Mozilla/5.0 (X11; Linux x86_64) ' + txt
+
+def xdir(o, skip=None):
+    res = []
+    for k in dir(o):
+        if skip is not None and skip in k:
+            continue
+        res.append(k)
+    return res
+

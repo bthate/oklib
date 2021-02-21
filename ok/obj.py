@@ -1,4 +1,4 @@
-import datetime, importlib, json, os, random, sys, uuid
+import datetime, importlib, json, os, random, sys, types, uuid
 
 class ENOCLASS(Exception):
 
@@ -10,7 +10,13 @@ class ENOFILENAME(Exception):
 
 class O:
 
-    __slots__ = ("__dict__",)
+    __slots__ = ("__dict__",) 
+
+    def __init__(self, *args, **kwargs):
+        #super().__init__()
+        self.__dict__ = {}
+        if args:
+            self.__dict__.update(args[0])
 
     def __delitem__(self, k):
         try:
@@ -28,7 +34,7 @@ class O:
         return len(self.__dict__)
 
     def __lt__(self, o):
-        return len(self) < len(o)
+        return len(self.__dict__) < len(o)
 
     def __setitem__(self, k, v):
         self.__dict__[k] = v
@@ -38,14 +44,7 @@ class O:
 
 class Obj(O):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        if args:
-            self.__dict__.update(args[0])
-
     def get(self, k, d=None):
-        if isinstance(self, dict):
-            return self.get(k, d)
         return self.__dict__.get(k, d)
 
     def items(self):
@@ -58,7 +57,7 @@ class Obj(O):
         self.__dict__[k] = v
 
     def set(self, k, v):
-        setattr(self, k, v)
+        self.__dict__[k] = v
 
     def update(self, d):
         try:
@@ -183,16 +182,14 @@ class Default(Object):
 
     def __getattr__(self, k):
         try:
-            return super().__getattribute__(k)
+            return self.__getattribute__(k)
         except AttributeError:
             try:
                 return super().__getitem__(k)
             except KeyError:
                 return self.default
-
+ 
 class Cfg(Default):
-
-    pass
 
     def op(self, ops):
         for o in ops:
@@ -279,20 +276,6 @@ def default(o):
 def mkstamp(o):
     timestamp = str(datetime.datetime.now()).split()
     return os.path.join(get_type(o), str(uuid.uuid4()), os.sep.join(timestamp))
-
-def ojson(o, *args, **kwargs):
-    return json.dumps(o, default=default, *args, **kwargs)
-
-def tojson(d):
-    return json.dumps(d, default=default, indent=4, sort_keys=True)
-
-def xdir(o, skip=None):
-    res = []
-    for k in dir(o):
-        if skip is not None and skip in k:
-            continue
-        res.append(k)
-    return res
 
 cfg = Cfg()
 cfg.wd = ""

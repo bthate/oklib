@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from ok.obj import cfg
-from ok.shl import Shell
+from ok.shl import Shell, parse
 from ok.trm import wrap
 from ok.utl import e, j, os, sys
 
@@ -9,11 +9,17 @@ wd = e("~/.ok")
 md = j(os.getcwd(), "mod")
 
 def main():
+    parse()
     cfg.wd = wd
     h = Shell()
     h.scandir(md)
     h.load_mod("cli,cmd,fnd,irc,rss")
     h.load_mod(cfg.mods)
-    return h.cmd(" ".join(sys.argv[1:]))
+    if cfg.txt:
+        return h.cmd(cfg.otxt)
+    if cfg.op("c"):
+        h.start()
+        h.init(cfg.mods)
+        h.wait()
 
 wrap(main)
